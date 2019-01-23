@@ -1,6 +1,9 @@
 - build: examples/01-simple-gpio
-  photon: [0.6.3, 0.7.0, 0.8.0-rc.8]
+  photon: [0.6.3, 0.7.0, 0.8.0-rc.12, 1.0.0]
   p1: [latest]
-  electron: [0.6.4, 0.7.0, 0.8.0-rc.8]
+  electron: [0.6.4, 0.7.0, 0.8.0-rc.12, 1.0.0]
+  argon: [0.8.0-rc.27]
+  boron: [0.8.0-rc.27]
+  xenon: [0.8.0-rc.27]
 - build: examples/02-really-simple-output
   photon: [latest]

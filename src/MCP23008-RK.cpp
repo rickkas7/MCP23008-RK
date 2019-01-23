@@ -74,6 +74,11 @@ int32_t MCP23008::digitalRead(uint16_t pin) {
 	}
 }
 
+uint8_t MCP23008::readAllPins() {
+	return readRegister(REG_GPIO);
+}
+
+
 bool MCP23008::readRegisterPin(uint8_t reg, uint16_t pin) {
 	if (!pinAvailable(pin)) {
 		return false;
@@ -82,9 +87,9 @@ bool MCP23008::readRegisterPin(uint8_t reg, uint16_t pin) {
 	return readRegister(reg) & (1 << pin);
 }
 
-void MCP23008::writeRegisterPin(uint8_t reg, uint16_t pin, bool value) {
+bool MCP23008::writeRegisterPin(uint8_t reg, uint16_t pin, bool value) {
 	if (!pinAvailable(pin)) {
-		return;
+		return false;
 	}
 
 	uint8_t regValue = readRegister(reg);
@@ -96,7 +101,7 @@ void MCP23008::writeRegisterPin(uint8_t reg, uint16_t pin, bool value) {
 		regValue &= ~(1 << pin);
 	}
 
-	writeRegister(reg, regValue);
+	return writeRegister(reg, regValue);
 }
 
 
@@ -113,14 +118,14 @@ uint8_t MCP23008::readRegister(uint8_t reg) {
 	return value;
 }
 
-void MCP23008::writeRegister(uint8_t reg, uint8_t value) {
+bool MCP23008::writeRegister(uint8_t reg, uint8_t value) {
 	wire.beginTransmission(addr | DEVICE_ADDR);
 	wire.write(reg);
 	wire.write(value);
 
-	// int stat =
-	wire.endTransmission(true);
+	int stat = wire.endTransmission(true);
 
 	// Serial.printlnf("writeRegister reg=%d value=%d stat=%d read=%d", reg, value, stat, readRegister(reg));
+	return (stat == 0);
 }
 

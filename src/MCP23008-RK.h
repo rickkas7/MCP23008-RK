@@ -16,11 +16,13 @@ public:
 	void digitalWrite(uint16_t pin, uint8_t value);
 	int32_t digitalRead(uint16_t pin);
 
+	uint8_t readAllPins();
+
 	bool readRegisterPin(uint8_t reg, uint16_t pin);
-	void writeRegisterPin(uint8_t reg, uint16_t pin, bool value);
+	bool writeRegisterPin(uint8_t reg, uint16_t pin, bool value);
 
 	uint8_t readRegister(uint8_t reg);
-	void writeRegister(uint8_t reg, uint8_t value);
+	bool writeRegister(uint8_t reg, uint8_t value);
 
 
 	// These are just for reference so you can see which way the pin numbers are laid out
