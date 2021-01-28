@@ -1,6 +1,24 @@
 #ifndef __MCP23008_RK_H
 #define __MCP23008_RK_H
 
+#include "Particle.h"
+
+#include <vector>
+
+enum class MCP23008InterruptOutputType {
+	ACTIVE_LOW,
+	ACTIVE_HIGH,
+	OPEN_DRAIN,
+	OPEN_DRAIN_NO_PULL
+};
+
+struct MCP23008InterruptHandler {
+	uint16_t pin;
+	InterruptMode mode;
+	std::function<void(bool)> handler;
+	void *context;
+	bool lastState;
+};
 
 class MCP23008 {
 public:
@@ -17,6 +35,10 @@ public:
 	int32_t digitalRead(uint16_t pin);
 
 	uint8_t readAllPins();
+
+	void enableInterrupts(pin_t mcuInterruptPin, MCP23008InterruptOutputType outputType);
+	void attachInterrupt(uint16_t pin, InterruptMode mode, std::function<void(bool)> handler, void *context = 0);
+	void detachInterrupt(uint16_t pin);
 
 	bool readRegisterPin(uint8_t reg, uint16_t pin);
 	bool writeRegisterPin(uint8_t reg, uint16_t pin, bool value);
@@ -53,8 +75,17 @@ public:
 	static const uint8_t DEVICE_ADDR = 0b0100000;
 
 protected:
+	void handleInterrupts();
+
+	static os_thread_return_t threadFunctionStatic(void* param);
+
+	pin_t mcuInterruptPin = PIN_INVALID;
+	std::vector<MCP23008InterruptHandler*> interruptHandlers;
 	TwoWire &wire;
 	int addr; // This is just 0-7, the (0b0100000 of the 7-bit address is ORed in later)
+	size_t stackSize = 1024;
+	static Thread *thread;
+	static std::vector<MCP23008 *> *instances;
 };
 
 #endif /* __MCP23008_RK_H */

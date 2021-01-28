@@ -163,4 +163,10 @@ This should result in the following:
 You can also connect a jumper from GP7 to one of those pins. It echoes the value on the GP7 input to the blue D7 LED on the Photon, so you can see the different frequencies.
 
 
+## Version History
+
+### 0.0.3 (2021-01-28)
+
+- Adds support for interrupt mode, to be further documented later.
+- Adds Wire lock() and unlock() for thread safety
 
