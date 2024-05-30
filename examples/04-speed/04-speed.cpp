@@ -16,7 +16,7 @@ os_thread_return_t threadFunction(void);
 bool pinState = false;
 
 void setup() {
-	Serial.begin(9600);
+    Wire.setSpeed(CLOCK_SPEED_400KHZ);
 
 	gpio.begin();
 	gpio.pinMode(0, OUTPUT);
